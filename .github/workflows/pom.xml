@@ -1,0 +1,46 @@
+name: Unit Tests (Maven)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Locate Maven project (pom.xml)
+        id: pom
+        run: |
+          set -e
+          POM_PATH="$(find . -maxdepth 6 -name pom.xml | head -n 1)"
+          if [ -z "$POM_PATH" ]; then
+            echo "No pom.xml found (maxdepth 6)."
+            exit 1
+          fi
+          echo "Found pom.xml at: $POM_PATH"
+          echo "pom_path=$POM_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Run unit tests
+        continue-on-error: true
+        run: mvn -f "${{ steps.pom.outputs.pom_path }}" test
+
+      - name: Upload Surefire reports (if present)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: |
+            **/target/surefire-reports/*
+            **/target/failsafe-reports/*
+          if-no-files-found: ignore
