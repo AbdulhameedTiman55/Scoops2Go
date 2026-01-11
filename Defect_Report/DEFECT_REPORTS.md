@@ -6,6 +6,9 @@
 | S-001 | Improper exception handling returns HTTP 500 | REQ-SEC-001 | A10 – Mishandling of Exceptional Conditions | High | Medium | Open | [<PASTE ISSUE LINK HERE](https://github.com/AbdulhameedTiman55/Scoops2Go/issues/3)> |
 
 
+| D-API-003 | 500 returned instead of validation error | REQ-API-Validation-001 |  | High | Medium | Open | https://github.com/AbdulhameedTiman55/Scoops2Go/issues/4 |
+
+
 
 
 
